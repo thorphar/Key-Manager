@@ -39,7 +39,7 @@ Source: "{#SourceDir}\{#AppExe}"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExe}"
-Name: "{autodesktop}\{#AppName}"; Description: "{#AppName}"; Tasks: desktopicon; Filename: "{app}\{#AppExe}"
+Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Launch {#AppName}"; Flags: nowait postinstall skipifsilent
