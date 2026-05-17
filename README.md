@@ -73,7 +73,7 @@ Output: `dist/KeyManager-0.1.0.exe`
 
 ```
 Key-Manager/
-  assets/icon.png         # App logo (window, tray, sidebar, header)
+  assets/icon.png         # App logo (window title bar, tray, exe, installer)
   assets/icon.ico         # Windows exe/installer icon (generated)
   main.py                 # GUI entry point
   ssh_config_gui/         # Application package

@@ -82,14 +82,6 @@ def make_app_icon() -> QIcon:
     return _fallback_app_icon()
 
 
-def app_logo_pixmap(size: int = 48) -> QPixmap:
-    icon = make_app_icon()
-    pixmap = icon.pixmap(size, size)
-    if pixmap.isNull():
-        return _fallback_app_icon().pixmap(size, size)
-    return pixmap
-
-
 def _fallback_app_icon(size: int = 64) -> QIcon:
     pix = QPixmap(size, size)
     pix.fill(Qt.GlobalColor.transparent)
@@ -149,18 +141,6 @@ def apply_theme(app: QApplication) -> None:
         #sidebar {{
             background-color: {c['sidebar']};
             border-right: 1px solid {c['border']};
-        }}
-
-        #sidebarLogo {{
-            background: transparent;
-            border: none;
-            padding: 0 0 8px 0;
-        }}
-
-        #headerLogo {{
-            background: transparent;
-            border: none;
-            padding-right: 12px;
         }}
 
         #sidebarTitle {{
