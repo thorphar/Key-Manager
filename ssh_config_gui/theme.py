@@ -2,9 +2,17 @@
 
 from __future__ import annotations
 
+import sys
+from functools import lru_cache
+from pathlib import Path
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFont, QIcon, QPainter, QPainterPath, QPalette, QPixmap
 from PySide6.QtWidgets import QApplication
+
+_ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
+_ICON_PNG = _ASSETS_DIR / "icon.png"
+_ICON_SIZES = (16, 24, 32, 48, 64, 128, 256)
 
 APP_NAME = "Key Manager"
 APP_TAGLINE = "SSH & AWS profiles"
@@ -44,7 +52,45 @@ def make_terminal_icon(size: int = 20) -> QIcon:
     return QIcon(pix)
 
 
-def make_app_icon(size: int = 64) -> QIcon:
+def assets_dir() -> Path:
+    """Directory containing bundled assets (dev tree or PyInstaller extract)."""
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / "assets"
+    return _ASSETS_DIR
+
+
+def icon_png_path() -> Path:
+    return assets_dir() / "icon.png"
+
+
+@lru_cache(maxsize=1)
+def make_app_icon() -> QIcon:
+    path = icon_png_path()
+    if path.is_file():
+        source = QPixmap(str(path))
+        if not source.isNull():
+            icon = QIcon()
+            for size in _ICON_SIZES:
+                scaled = source.scaled(
+                    size,
+                    size,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation,
+                )
+                icon.addPixmap(scaled)
+            return icon
+    return _fallback_app_icon()
+
+
+def app_logo_pixmap(size: int = 48) -> QPixmap:
+    icon = make_app_icon()
+    pixmap = icon.pixmap(size, size)
+    if pixmap.isNull():
+        return _fallback_app_icon().pixmap(size, size)
+    return pixmap
+
+
+def _fallback_app_icon(size: int = 64) -> QIcon:
     pix = QPixmap(size, size)
     pix.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pix)
@@ -58,7 +104,7 @@ def make_app_icon(size: int = 64) -> QIcon:
     font = QFont("Segoe UI", int(size * 0.42))
     font.setWeight(QFont.Weight.DemiBold)
     painter.setFont(font)
-    painter.drawText(pix.rect(), Qt.AlignmentFlag.AlignCenter, "C")
+    painter.drawText(pix.rect(), Qt.AlignmentFlag.AlignCenter, "K")
     painter.end()
     return QIcon(pix)
 
@@ -103,6 +149,18 @@ def apply_theme(app: QApplication) -> None:
         #sidebar {{
             background-color: {c['sidebar']};
             border-right: 1px solid {c['border']};
+        }}
+
+        #sidebarLogo {{
+            background: transparent;
+            border: none;
+            padding: 0 0 8px 0;
+        }}
+
+        #headerLogo {{
+            background: transparent;
+            border: none;
+            padding-right: 12px;
         }}
 
         #sidebarTitle {{

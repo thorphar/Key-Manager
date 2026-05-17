@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from PySide6.QtCore import QSettings
+from PySide6.QtCore import Qt, QSettings
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -23,7 +23,7 @@ from ssh_config_gui.aws_panel import AwsFilePanel
 from ssh_config_gui.config_io import HostEntry
 from ssh_config_gui.ssh_panel import SshConfigPanel
 from ssh_config_gui._version import __version__
-from ssh_config_gui.theme import APP_NAME, APP_TAGLINE
+from ssh_config_gui.theme import APP_NAME, APP_TAGLINE, app_logo_pixmap, make_app_icon
 from ssh_config_gui.tray_app import TrayController
 
 _NAV = (
@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
         self._settings = QSettings()
 
         self.setWindowTitle(self._window_title())
+        self.setWindowIcon(make_app_icon())
         self.resize(1024, 680)
         self.setMinimumSize(860, 520)
 
@@ -61,6 +62,13 @@ class MainWindow(QMainWindow):
         side_layout = QVBoxLayout(sidebar)
         side_layout.setContentsMargins(16, 20, 16, 16)
         side_layout.setSpacing(4)
+
+        sidebar_logo = QLabel()
+        sidebar_logo.setObjectName("sidebarLogo")
+        sidebar_logo.setPixmap(app_logo_pixmap(56))
+        sidebar_logo.setFixedSize(56, 56)
+        sidebar_logo.setScaledContents(True)
+        side_layout.addWidget(sidebar_logo, alignment=Qt.AlignmentFlag.AlignLeft)
 
         title = QLabel(APP_NAME)
         title.setObjectName("sidebarTitle")
@@ -92,6 +100,13 @@ class MainWindow(QMainWindow):
         header.setFixedHeight(64)
         header_row = QHBoxLayout(header)
         header_row.setContentsMargins(24, 0, 24, 0)
+
+        header_logo = QLabel()
+        header_logo.setObjectName("headerLogo")
+        header_logo.setPixmap(app_logo_pixmap(36))
+        header_logo.setFixedSize(36, 36)
+        header_logo.setScaledContents(True)
+        header_row.addWidget(header_logo, alignment=Qt.AlignmentFlag.AlignVCenter)
 
         header_text = QVBoxLayout()
         header_text.setSpacing(2)

@@ -59,6 +59,7 @@ The [Release workflow](.github/workflows/release.yml) runs on tag push.
 
 ```powershell
 pip install -r requirements.txt -r requirements-build.txt
+python scripts/build_icons.py
 python scripts/set_version.py 0.1.0
 $env:APP_VERSION = "0.1.0"
 pyinstaller packaging/KeyManager.spec --noconfirm --clean
@@ -72,6 +73,8 @@ Output: `dist/KeyManager-0.1.0.exe`
 
 ```
 Key-Manager/
+  assets/icon.png         # App logo (window, tray, sidebar, header)
+  assets/icon.ico         # Windows exe/installer icon (generated)
   main.py                 # GUI entry point
   ssh_config_gui/         # Application package
   scripts/set_version.py  # Version stamping for builds

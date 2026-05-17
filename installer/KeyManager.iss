@@ -27,6 +27,8 @@ SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
 ArchitecturesInstallIn64BitMode=x64compatible
+SetupIconFile=..\assets\icon.ico
+UninstallDisplayIcon={app}\{#AppExe}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

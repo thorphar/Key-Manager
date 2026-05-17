@@ -11,12 +11,14 @@ root = Path(SPECPATH).parent
 version = os.environ.get("APP_VERSION", "0.0.0-dev")
 app_name = f"KeyManager-{version}"
 version_file = root / "build" / "file_version_info.txt"
+icon_file = root / "assets" / "icon.ico"
+assets = [(str(root / "assets" / "icon.png"), "assets")]
 
 a = Analysis(
     [str(root / "main.py")],
     pathex=[str(root)],
     binaries=[],
-    datas=[],
+    datas=assets,
     hiddenimports=[
         "ssh_config_gui",
         "ssh_config_gui.app",
@@ -68,5 +70,5 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     version=str(version_file) if version_file.is_file() else None,
-    icon=None,
+    icon=str(icon_file) if icon_file.is_file() else None,
 )
