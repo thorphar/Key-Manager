@@ -60,7 +60,7 @@ jobs:
             dist/KeyManager-${{ steps.version.outputs.version }}-setup.exe
 
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
